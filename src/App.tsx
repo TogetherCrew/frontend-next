@@ -1,14 +1,9 @@
-import { Button } from '@mui/material';
+import { Routes } from 'react-router-dom';
 
-function App() {
+export function App() {
   return (
-    <>
-      <h1>Hello World!</h1>
-      <Button variant="outlined" color="primary">
-        dsa
-      </Button>
-    </>
+    <div>
+      <Routes>{/* <Route path="/" element={<Index />} /> */}</Routes>
+    </div>
   );
 }
-
-export default App;
