@@ -1,5 +1,9 @@
-function App() {
-  return <h1>Hello World!</h1>;
-}
+import { Routes } from 'react-router-dom';
 
-export default App;
+export function App() {
+  return (
+    <div>
+      <Routes>{/* <Route path="/" element={<Index />} /> */}</Routes>
+    </div>
+  );
+}
