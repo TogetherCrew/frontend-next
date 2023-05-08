@@ -1,5 +1,5 @@
 /* eslint-disable react/require-default-props */
-import { useDynamicSvgImport } from '../utils/useDynamicSvgImport.ts';
+import { useDynamicSvgImport } from '../utils/useDynamicSvgImport';
 
 interface IProps {
   iconName: string;
