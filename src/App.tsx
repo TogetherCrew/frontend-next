@@ -1,9 +1,23 @@
-import { Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import DefaultLayout from './layouts/DefaultLayout';
+import CommunityInsights from './pages/CommunityInsights';
 
-export function App() {
+function App() {
   return (
-    <div>
-      <Routes>{/* <Route path="/" element={<Index />} /> */}</Routes>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/community-insights"
+          element={
+            <DefaultLayout>
+              <CommunityInsights />
+            </DefaultLayout>
+          }
+        />
+        <Route path="*" element={<div>dsa</div>} />
+      </Routes>
+    </Router>
   );
 }
+
+export default App;

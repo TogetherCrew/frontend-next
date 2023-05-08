@@ -1,18 +1,18 @@
-import { describe, it } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it } from 'vitest';
+import { render, screen } from '@testing-library/react';
 
-import App from "./App";
+import App from './App';
 
-describe("App", () => {
-  it("Renders Hellow world!", () => {
+describe('App', () => {
+  it('Renders Hellow world!', () => {
     // ARRANGE
     render(<App />);
     // ACT
     // EXPECT
     expect(
-      screen.getByRole("heading", {
+      screen.getByRole('heading', {
         level: 1,
       })
-    ).toHaveTextContent("Hello World!");
+    ).toHaveTextContent('Hello World!');
   });
 });

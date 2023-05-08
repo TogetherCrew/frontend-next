@@ -1,3 +1,7 @@
+import { routes } from './TcRoutes';
+
 export const constant = {
-  DrawerWidth: '100px',
+  drawerWidth: '100px',
+  drawerBackgroundColor: '#EDEDED',
+  tcRoutes: routes,
 };
