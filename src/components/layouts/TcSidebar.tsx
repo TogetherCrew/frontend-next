@@ -1,19 +1,12 @@
-import { Link } from 'react-router-dom';
 import Drawer from '@mui/material/Drawer';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import { constant } from '../../constants/Index';
+import TcSidebarItem from './TcSidebarItem';
 
-interface TcSidebarProps {
-  routes: { name: string; path: string }[];
-}
+const { drawerWidth, drawerBackgroundColor, tcRoutes } = constant;
 
-const { drawerWidth, drawerBackgroundColor } = constant;
-
-function TcSidebar({ routes }: TcSidebarProps) {
+function TcSidebar() {
   const theme = useTheme();
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
@@ -44,30 +37,7 @@ function TcSidebar({ routes }: TcSidebarProps) {
         keepMounted: true,
       }}
     >
-      <List sx={{ flexGrow: 1 }}>
-        {routes.map((route) => (
-          <>
-            <ListItemButton
-              key={route.path}
-              component={Link}
-              to={route.path}
-              sx={{
-                width: '70%',
-                display: 'flex',
-                justifyContent: 'center',
-                margin: 'auto',
-                borderRadius: '10px',
-                '&:hover': {
-                  backgroundColor: theme.palette.white.main,
-                },
-              }}
-            >
-              icon
-            </ListItemButton>
-            <ListItemText primary={route.name} sx={{ textAlign: 'center' }} />
-          </>
-        ))}
-      </List>
+      <TcSidebarItem sidebarMenuItems={tcRoutes} />
     </Drawer>
   );
 }
