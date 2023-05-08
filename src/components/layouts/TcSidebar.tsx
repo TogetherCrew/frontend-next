@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
@@ -46,9 +46,26 @@ function TcSidebar({ routes }: TcSidebarProps) {
     >
       <List sx={{ flexGrow: 1 }}>
         {routes.map((route) => (
-          <ListItem button key={route.path} component={Link} to={route.path}>
-            <ListItemText primary={route.name} />
-          </ListItem>
+          <>
+            <ListItemButton
+              key={route.path}
+              component={Link}
+              to={route.path}
+              sx={{
+                width: '70%',
+                display: 'flex',
+                justifyContent: 'center',
+                margin: 'auto',
+                borderRadius: '10px',
+                '&:hover': {
+                  backgroundColor: theme.palette.white.main,
+                },
+              }}
+            >
+              icon
+            </ListItemButton>
+            <ListItemText primary={route.name} sx={{ textAlign: 'center' }} />
+          </>
         ))}
       </List>
     </Drawer>
