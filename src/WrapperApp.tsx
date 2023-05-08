@@ -5,11 +5,9 @@ import { theme } from './constants/theme';
 
 export function WrappedApp() {
   return (
-    <div>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
   );
 }
