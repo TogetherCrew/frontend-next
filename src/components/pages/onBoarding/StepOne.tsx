@@ -2,14 +2,14 @@ import { Grid, Typography } from '@mui/material';
 import { theme } from '../../../constants/theme';
 import TcButton from '../../TcButton';
 import TcChecbox from '../../TcChecbox';
+import { redirectToDiscord } from '../../../helper/redirectToDsicord';
 
 interface IStepOneProps {
   isChecked: boolean;
   handleCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  goNext: (step: number) => void;
 }
 
-function stepOne({ isChecked, handleCheckboxChange, goNext }: IStepOneProps) {
+function StepOne({ isChecked, handleCheckboxChange }: IStepOneProps) {
   return (
     <Grid container>
       <Grid
@@ -53,7 +53,9 @@ function stepOne({ isChecked, handleCheckboxChange, goNext }: IStepOneProps) {
             label="Connect your community"
             variant="contained"
             sx={{ height: '48px', width: '240px', marginTop: '2rem' }}
-            onClick={() => goNext(1)}
+            onClick={() => {
+              redirectToDiscord();
+            }}
           />
         </Grid>
       </Grid>
@@ -61,4 +63,4 @@ function stepOne({ isChecked, handleCheckboxChange, goNext }: IStepOneProps) {
   );
 }
 
-export default stepOne;
+export default StepOne;

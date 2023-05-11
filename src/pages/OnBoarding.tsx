@@ -113,7 +113,6 @@ function OnBoarding() {
               handleCheckboxChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 handleCheckboxChange(e)
               }
-              goNext={(nextStep) => setActiveStep(nextStep)}
             />
           ) : activeStep === 1 ? (
             <StepTwo goNext={(nextStep) => setActiveStep(nextStep)} />
