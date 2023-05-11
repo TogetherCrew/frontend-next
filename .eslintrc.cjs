@@ -17,7 +17,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    project: './tsconfig.json',
+    project: ['./tsconfig.json', './custom.d.ts'],
   },
   plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
@@ -25,5 +25,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'react/jsx-props-no-spreading': 'off',
+    'no-array-index-key': 'off',
+    'no-nested-ternary': 'off',
   },
 };

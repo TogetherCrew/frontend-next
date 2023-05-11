@@ -13,6 +13,7 @@ function TcSidebar() {
 
   return (
     <Drawer
+      data-testid="sidebar"
       sx={{
         display: 'flex',
         flexDirection: 'column',
