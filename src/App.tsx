@@ -2,6 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import DefaultLayout from './layouts/DefaultLayout';
 import CommunityInsights from './pages/CommunityInsights';
 import OnBoarding from './pages/OnBoarding';
+import { Envs, ensureEnvironments } from './config/index';
+
+const env: Envs = ensureEnvironments();
 
 function App() {
   return (

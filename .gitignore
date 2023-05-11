@@ -23,4 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+# test coverage
 ./coverage
+
+# env vars
+.env.*
