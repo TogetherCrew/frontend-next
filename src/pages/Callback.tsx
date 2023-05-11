@@ -1,25 +1,19 @@
 import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 import getUrlParams from '../helper/routeHelper';
+import useStatusCodeService from '../services/StatusCodeService';
+import { CallbackUrlParams, UrlParams } from '../utils/interfaces';
 
 function Callback() {
   const location = useLocation();
-  const params = getUrlParams(location);
+  const params: UrlParams = getUrlParams(location);
+  const { handleStatusCode } = useStatusCodeService();
 
-  console.log({ params });
+  useEffect(() => {
+    handleStatusCode(params as unknown as CallbackUrlParams);
+  }, [params, handleStatusCode]);
 
-  return (
-    <div>
-      Loading...
-      {/* <h2>URL Parameters:</h2>
-      <ul>
-        {params.map(([key, value]) => (
-          <li key={key}>
-            <strong>{key}:</strong> {value}
-          </li>
-        ))}
-      </ul> */}
-    </div>
-  );
+  return <div>Loading...</div>;
 }
 
 export default Callback;

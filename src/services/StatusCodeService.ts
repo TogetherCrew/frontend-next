@@ -1,35 +1,28 @@
 import { useNavigate } from 'react-router-dom';
 import { showToast } from '../helper/toasterHelper';
 import { StorageService } from './StorageService';
+import { CallbackUrlParams } from '../utils/interfaces';
 
-interface CallbackUrlParams {
-  statusCode: string;
-  accessToken: string;
-  accessExp: string;
-  refreshExp: string;
-  refreshToken: string;
-  guildId: string;
-  guildName: string;
-}
-
-class StatusCodeService {
-  // Obtain the navigate function from react-router-dom
-  private static navigate = useNavigate();
+const useStatusCodeService = () => {
+  const navigate = useNavigate();
+  let isToastShown = false; // Flag to track if a toast is currently shown
+  /**
+   * Display a toast notification for failed authentication.
+   */
+  const notifyAsToast = () => {
+    if (!isToastShown) {
+      showToast('Discord authentication failed. Please try again.');
+      isToastShown = true;
+    }
+  };
 
   /**
-   * Displays a toast notification for failed authentication.
+   * Redirect to the specified route.
+   * @param {string} pathname - The pathname of the route.
+   * @param {CallbackUrlParams} params - The callback URL parameters.
    */
-  private static showToast() {
-    showToast('Discord authentication failed. Please try again.');
-  }
-
-  /**
-   * Redirects to the specified route with optional query parameters.
-   * @param pathname - The path of the route to navigate to.
-   * @param params - Optional query parameters as an object.
-   */
-  private static redirectToRoute(pathname: string, params?: CallbackUrlParams) {
-    // Convert the params object into a query string
+  const redirectToRoute = (pathname: string, params?: CallbackUrlParams) => {
+    // Convert the callback URL parameters to a URL query string
     const urlParams: Record<string, string> = params
       ? Object.entries(params).reduce((acc, [key, value]) => {
           return { ...acc, [key]: value };
@@ -39,32 +32,29 @@ class StatusCodeService {
     const searchParams = new URLSearchParams(urlParams);
     const queryString = searchParams.toString();
 
-    // Construct the full URL with the path and query string
     const url = `${pathname}${queryString ? `?${queryString}` : ''}`;
-
-    // Navigate to the specified URL
-    this.navigate(url);
-  }
+    navigate(url);
+  };
 
   /**
-   * Handles the status code and performs the corresponding actions.
-   * @param params - The callback URL parameters.
+   * Handle the status code and perform the corresponding actions.
+   * @param {CallbackUrlParams} params - The callback URL parameters.
    */
-  static handleStatusCode(params: CallbackUrlParams) {
+  const handleStatusCode = (params: CallbackUrlParams) => {
     const { statusCode } = params;
 
     switch (statusCode) {
       case '490':
-        this.showToast();
-        this.redirectToRoute('/try-now');
+        notifyAsToast();
+        redirectToRoute('/try-now');
         break;
       case '491':
-        this.showToast();
-        this.redirectToRoute('/settings');
+        notifyAsToast();
+        redirectToRoute('/settings');
         break;
       case '501':
       case '502':
-        this.redirectToRoute('/try-now', params);
+        redirectToRoute('/try-now', params);
         break;
       case '503':
       case '504':
@@ -81,11 +71,11 @@ class StatusCodeService {
             refreshExp: params.refreshExp,
           },
         });
-        this.redirectToRoute('/');
+        redirectToRoute('/community-insights');
         break;
       case '602':
         StorageService.removeLocalStorage('user');
-        this.redirectToRoute('/try-now');
+        redirectToRoute('/try-now');
         break;
       case '603':
         StorageService.writeLocalStorage('user', {
@@ -100,7 +90,7 @@ class StatusCodeService {
             refreshExp: params.refreshExp,
           },
         });
-        this.redirectToRoute('/');
+        redirectToRoute('/community-insights');
         break;
       case '701':
       case '702':
@@ -116,12 +106,15 @@ class StatusCodeService {
             refreshExp: params.refreshExp,
           },
         });
-        this.redirectToRoute('/settings');
+        redirectToRoute('/settings');
         break;
       default:
         break;
     }
-  }
-}
+  };
 
-export default StatusCodeService;
+  // Return the handleStatusCode function to be used in the component
+  return { handleStatusCode };
+};
+
+export default useStatusCodeService;
