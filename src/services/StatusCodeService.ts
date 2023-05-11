@@ -6,6 +6,7 @@ import { CallbackUrlParams } from '../utils/interfaces';
 const useStatusCodeService = () => {
   const navigate = useNavigate();
   let isToastShown = false; // Flag to track if a toast is currently shown
+
   /**
    * Display a toast notification for failed authentication.
    */
@@ -37,6 +38,25 @@ const useStatusCodeService = () => {
   };
 
   /**
+   * Write user data to local storage.
+   * @param {CallbackUrlParams} params - The callback URL parameters.
+   */
+  const writeToLocalStorage = (params: CallbackUrlParams) => {
+    StorageService.writeLocalStorage('user', {
+      guild: {
+        guildId: params.guildId,
+        guildName: params.guildName,
+      },
+      token: {
+        accessToken: params.accessToken,
+        accessExp: params.accessExp,
+        refreshToken: params.refreshToken,
+        refreshExp: params.refreshExp,
+      },
+    });
+  };
+
+  /**
    * Handle the status code and perform the corresponding actions.
    * @param {CallbackUrlParams} params - The callback URL parameters.
    */
@@ -59,18 +79,7 @@ const useStatusCodeService = () => {
       case '503':
       case '504':
       case '601':
-        StorageService.writeLocalStorage('user', {
-          guild: {
-            guildId: params.guildId,
-            guildName: params.guildName,
-          },
-          token: {
-            accessToken: params.accessToken,
-            accessExp: params.accessExp,
-            refreshToken: params.refreshToken,
-            refreshExp: params.refreshExp,
-          },
-        });
+        writeToLocalStorage(params);
         redirectToRoute('/community-insights');
         break;
       case '602':
@@ -78,34 +87,12 @@ const useStatusCodeService = () => {
         redirectToRoute('/try-now');
         break;
       case '603':
-        StorageService.writeLocalStorage('user', {
-          guild: {
-            guildId: params.guildId,
-            guildName: params.guildName,
-          },
-          token: {
-            accessToken: params.accessToken,
-            accessExp: params.accessExp,
-            refreshToken: params.refreshToken,
-            refreshExp: params.refreshExp,
-          },
-        });
+        writeToLocalStorage(params);
         redirectToRoute('/community-insights');
         break;
       case '701':
       case '702':
-        StorageService.writeLocalStorage('user', {
-          guild: {
-            guildId: params.guildId,
-            guildName: params.guildName,
-          },
-          token: {
-            accessToken: params.accessToken,
-            accessExp: params.accessExp,
-            refreshToken: params.refreshToken,
-            refreshExp: params.refreshExp,
-          },
-        });
+        writeToLocalStorage(params);
         redirectToRoute('/settings');
         break;
       default:
