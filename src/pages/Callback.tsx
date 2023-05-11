@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import getUrlParams from '../helper/routeHelper';
 
-function MyComponent() {
+function Callback() {
   const location = useLocation();
   const params = getUrlParams(location);
 
@@ -19,4 +19,4 @@ function MyComponent() {
   );
 }
 
-export default MyComponent;
+export default Callback;
