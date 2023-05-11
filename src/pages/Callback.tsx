@@ -5,16 +5,19 @@ function Callback() {
   const location = useLocation();
   const params = getUrlParams(location);
 
+  console.log({ params });
+
   return (
     <div>
-      <h2>URL Parameters:</h2>
+      Loading...
+      {/* <h2>URL Parameters:</h2>
       <ul>
         {params.map(([key, value]) => (
           <li key={key}>
             <strong>{key}:</strong> {value}
           </li>
         ))}
-      </ul>
+      </ul> */}
     </div>
   );
 }
