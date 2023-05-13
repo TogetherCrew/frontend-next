@@ -8,11 +8,11 @@ interface Option {
 }
 
 function TcRangePicker({ options }: { options: Option[] }) {
-  const [selectedRange, setSelectedRange] = useState<Option | null>(options[0]);
+  const [selectedRange, setSelectedRange] = useState<Option>(options[0]);
 
   function handleOptionClick(option: Option) {
     setSelectedRange((prevSelectedRange) =>
-      prevSelectedRange === option ? null : option
+      prevSelectedRange === option ? prevSelectedRange : option
     );
   }
 
@@ -29,13 +29,11 @@ function TcRangePicker({ options }: { options: Option[] }) {
           variant="contained"
           sx={{
             backgroundColor:
-              selectedRange && selectedRange.value === option.value
+              selectedRange.value === option.value
                 ? 'secondary.main'
                 : 'grey.darken',
             color:
-              selectedRange && selectedRange.value === option.value
-                ? 'white'
-                : 'secondary.main',
+              selectedRange.value === option.value ? 'white' : 'secondary.main',
             padding: '0.4rem',
             borderRadius: '6px',
             marginRight: '0.5rem',
@@ -44,7 +42,7 @@ function TcRangePicker({ options }: { options: Option[] }) {
             cursor: 'pointer',
             '&:hover': {
               backgroundColor:
-                selectedRange && selectedRange.value === option.value
+                selectedRange.value === option.value
                   ? 'secondary.main'
                   : 'grey.dark',
             },
