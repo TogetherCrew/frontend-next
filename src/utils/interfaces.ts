@@ -72,3 +72,20 @@ export interface IHeatmapChartPayload extends IGraphPeriodPayload {
   timeZone: string;
   channelIds: string[];
 }
+
+export interface IUserGuildResponse {
+  id: string;
+  name: string;
+  icon: string;
+  owner: boolean;
+  permissions: string;
+  features: string[];
+}
+
+export interface IUserResponse {
+  id: string;
+  discordId: string;
+  email: string;
+  avatar: string;
+  verified: boolean;
+}
