@@ -44,7 +44,6 @@ function StepTwo({ goNext }: IStepTwoProps) {
           autoComplete="off"
           value={emailAddress}
           InputProps={{ disableUnderline: true }}
-          className="w-full md:w-2/5"
         />
       </Grid>
       <Grid item xs={10} rowSpacing={2}>
