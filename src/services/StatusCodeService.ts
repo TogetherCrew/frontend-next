@@ -54,9 +54,7 @@ const useStatusCodeService = () => {
       },
       token: {
         accessToken: params.accessToken,
-        accessExp: params.accessExp,
         refreshToken: params.refreshToken,
-        refreshExp: params.refreshExp,
       },
     });
   };

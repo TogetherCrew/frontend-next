@@ -40,7 +40,7 @@ export interface IChannel {
   channelName: string;
 }
 
-export interface IGuild {
+export interface IGuildPayloadOptions {
   period?: string;
   selectedChannels?: IChannel[];
 }
@@ -88,4 +88,17 @@ export interface IUserResponse {
   email: string;
   avatar: string;
   verified: boolean;
+}
+
+export interface IGuild {
+  guildId: string;
+  guildName: string;
+}
+export interface IToken {
+  accessToken: string;
+  refreshToken: string;
+}
+export interface IUserData {
+  guild: IGuild;
+  token: IToken;
 }

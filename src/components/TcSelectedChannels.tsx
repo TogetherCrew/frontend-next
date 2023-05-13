@@ -6,16 +6,31 @@ import {
   DialogTitle,
 } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import TcButton from './TcButton';
 import TcDialog from './TcDialog';
 import SvgIcon from './SvgIcon';
 import TcChannelList from './TcChannelList';
 import TcAccardion from './TcAccardion';
+import { UserContext } from '../context/UserContext';
+import { useGuildChannels } from '../hooks/GuildHooks';
 
 function TcSelectedChannels() {
   const [isOpenDialog, setOpenDialog] = useState<boolean>(false);
   const selectedChannels = 0;
+  const { state } = useContext(UserContext);
+  const { user } = state;
+  const guildId = user?.guild?.guildId || '';
+
+  const { isLoading, isError, data, error, refetch } = useGuildChannels({
+    guildId,
+    enabled: false,
+  });
+
+  const getGuildsChannels = () => {
+    refetch();
+    setOpenDialog(true);
+  };
   return (
     <div
       style={{
@@ -27,10 +42,10 @@ function TcSelectedChannels() {
       <Typography variant="body1" color="black">
         Selected channels: {selectedChannels}
       </Typography>
-      <TcButton label="Show channels" onClick={() => setOpenDialog(true)} />
+      <TcButton label="Show channels" onClick={() => getGuildsChannels()} />
       <TcDialog
         open={isOpenDialog}
-        toggleDialog={(state) => setOpenDialog(state)}
+        toggleDialog={(e) => setOpenDialog(e)}
         sx={{
           '& .MuiDialog-container': {
             alignItems: 'center',

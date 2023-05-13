@@ -1,7 +1,7 @@
 import { api } from '../lib/api';
 import {
   IGuildQueryOptions,
-  IGuild,
+  IGuildPayloadOptions,
   IDisconnectTypeValue,
 } from '../utils/interfaces';
 
@@ -98,7 +98,10 @@ class GuildApi {
    * @param guildData - The data to update the guild with.
    * @returns A Promise that resolves to the updated guild data.
    */
-  public static async updateGuild(guildId: string, guildData: IGuild) {
+  public static async updateGuild(
+    guildId: string,
+    guildData: IGuildPayloadOptions
+  ) {
     try {
       const response = await api.patch(`/guilds/${guildId}`, guildData);
       return response.data;

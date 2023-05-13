@@ -44,15 +44,12 @@ function OnBoarding() {
         guildName: params.guildName || '',
       };
       setUrlParams(callbackParams);
-      console.log({ params });
 
       if (params.statusCode === '501') {
-        console.log('501');
         setActiveServerStatus(false);
         setActiveStep(1);
       } else if (params.statusCode === '502') {
         setActiveServerStatus(true);
-        console.log(params.statusCode);
       }
     }, 500),
     [location]
