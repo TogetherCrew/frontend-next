@@ -2,7 +2,7 @@ import { Grid, Typography } from '@mui/material';
 import { theme } from '../../../constants/theme';
 import TcButton from '../../TcButton';
 import TcChecbox from '../../TcChecbox';
-import { redirectToDiscord } from '../../../helper/redirectToDsicord';
+import AuthApi from '../../../api/AuthApi';
 
 interface IStepOneProps {
   isChecked: boolean;
@@ -10,6 +10,10 @@ interface IStepOneProps {
 }
 
 function StepOne({ isChecked, handleCheckboxChange }: IStepOneProps) {
+  function redirectToDiscord() {
+    AuthApi.redirectToDiscord();
+  }
+
   return (
     <Grid container>
       <Grid
