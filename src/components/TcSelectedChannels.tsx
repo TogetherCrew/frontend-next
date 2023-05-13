@@ -24,7 +24,7 @@ function TcSelectedChannels() {
         gap: '1rem',
       }}
     >
-      <Typography variant="body1" color="initial">
+      <Typography variant="body1" color="black">
         Selected channels: {selectedChannels}
       </Typography>
       <TcButton label="Show channels" onClick={() => setOpenDialog(true)} />
@@ -64,7 +64,7 @@ function TcSelectedChannels() {
             onClick={() => setOpenDialog(false)}
           />
         </DialogTitle>
-        <Typography variant="body2" color="initial">
+        <Typography variant="body2" color="black">
           Select channels to import activity in this workspace. Please give
           Together Crew access to all selected private channels by updating the
           channels permissions in Discord. Discord permission will affect the
@@ -80,7 +80,7 @@ function TcSelectedChannels() {
           >
             <AccordionSummary>
               {' '}
-              <Typography variant="body1" color="initial" fontWeight="semibold">
+              <Typography variant="body1" color="black" fontWeight="semibold">
                 How to give access to the channel you want to import?
               </Typography>
             </AccordionSummary>
@@ -88,7 +88,7 @@ function TcSelectedChannels() {
               <>
                 <Typography
                   variant="body2"
-                  color="initial"
+                  color="black"
                   sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
                 >
                   Navigate to the channel you want to import on{' '}
@@ -103,7 +103,7 @@ function TcSelectedChannels() {
                 </Typography>
                 <Typography
                   variant="body2"
-                  color="initial"
+                  color="black"
                   sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
                 >
                   Go to the settings for that specific channel (select the wheel
@@ -111,7 +111,7 @@ function TcSelectedChannels() {
                 </Typography>
                 <Typography
                   variant="body2"
-                  color="initial"
+                  color="black"
                   sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
                 >
                   Select <b>Permissions</b> (left sidebar), and then in the
@@ -119,7 +119,7 @@ function TcSelectedChannels() {
                 </Typography>
                 <Typography
                   variant="body2"
-                  color="initial"
+                  color="black"
                   sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
                 >
                   With the <b>TogetherCrew Bot</b> selected, under Advanced
@@ -128,7 +128,7 @@ function TcSelectedChannels() {
                 </Typography>
                 <Typography
                   variant="body2"
-                  color="initial"
+                  color="black"
                   sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
                 >
                   Select the plus sign to the right of Roles/Members and under
@@ -136,7 +136,7 @@ function TcSelectedChannels() {
                 </Typography>
                 <Typography
                   variant="body2"
-                  color="initial"
+                  color="black"
                   sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
                 >
                   Click on the <b>Refresh List</b> button on this window and

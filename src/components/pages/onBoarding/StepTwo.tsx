@@ -21,17 +21,17 @@ function StepTwo({ goNext }: IStepTwoProps) {
   return (
     <Grid container margin="0 auto" columnSpacing={8} rowSpacing={4}>
       <Grid item xs={12}>
-        <Typography variant="body1" color="initial" fontWeight="bold">
+        <Typography variant="body1" color="black" fontWeight="bold">
           Choose date period for data analysis
         </Typography>
-        <Typography variant="body1" color="initial" mb="1rem">
+        <Typography variant="body1" color="black" mb="1rem">
           You will be able to change date period and selected channels in the
           future.
         </Typography>
         <TcRangePicker options={options} />
       </Grid>
       <Grid item xs={8} rowSpacing={4}>
-        <Typography variant="body1" color="initial" fontWeight="bold">
+        <Typography variant="body1" color="black" fontWeight="bold">
           Confirm your imported channels
         </Typography>
         <TcSelectedChannels />

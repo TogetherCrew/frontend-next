@@ -103,7 +103,7 @@ function TcChannelList() {
           key={guild.id}
           style={{ display: 'flex', flexDirection: 'column' }}
         >
-          <Typography variant="body1" color="initial" fontWeight="semibold">
+          <Typography variant="body1" color="black" fontWeight="semibold">
             {guild.title}
           </Typography>
           <div

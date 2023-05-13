@@ -21,14 +21,14 @@ function StepThree({ goNext }: IStepThreeProps) {
         <Grid item xs={8}>
           <Typography
             variant="h5"
-            color="initial"
+            color="black"
             fontWeight="bold"
             textAlign="center"
             my={3}
           >
             Perfect, you're all set!
           </Typography>
-          <Typography variant="body1" color="initial" textAlign="center">
+          <Typography variant="body1" color="black" textAlign="center">
             Data import just started. It might take up to 12 hours to finish.
             Once it is done we will send you a <b>message on Discord.</b>
           </Typography>
@@ -46,7 +46,7 @@ function StepThree({ goNext }: IStepThreeProps) {
           />
         </Grid>
         <Grid item xs={9} mt={4}>
-          <Typography variant="body1" color="initial">
+          <Typography variant="body1" color="black">
             While you are waiting, read our research about{' '}
             <b style={{ color: theme.palette.primary.main }}>
               Community Health.

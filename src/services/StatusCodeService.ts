@@ -41,8 +41,13 @@ const useStatusCodeService = () => {
    * Write user data to local storage.
    * @param {CallbackUrlParams} params - The callback URL parameters.
    */
-  const writeToLocalStorage = (params: CallbackUrlParams) => {
-    StorageService.writeLocalStorage('user', {
+  const writeUserToLocalStorage = (
+    params: CallbackUrlParams,
+    _key?: string
+  ) => {
+    const key = _key || 'user';
+
+    StorageService.writeLocalStorage(key, {
       guild: {
         guildId: params.guildId,
         guildName: params.guildName,
@@ -79,7 +84,7 @@ const useStatusCodeService = () => {
       case '503':
       case '504':
       case '601':
-        writeToLocalStorage(params);
+        writeUserToLocalStorage(params);
         redirectToRoute('/community-insights');
         break;
       case '602':
@@ -87,12 +92,12 @@ const useStatusCodeService = () => {
         redirectToRoute('/try-now');
         break;
       case '603':
-        writeToLocalStorage(params);
+        writeUserToLocalStorage(params);
         redirectToRoute('/community-insights');
         break;
       case '701':
       case '702':
-        writeToLocalStorage(params);
+        writeUserToLocalStorage(params);
         redirectToRoute('/settings');
         break;
       default:
@@ -101,7 +106,7 @@ const useStatusCodeService = () => {
   };
 
   // Return the handleStatusCode function to be used in the component
-  return { handleStatusCode };
+  return { handleStatusCode, writeUserToLocalStorage };
 };
 
 export default useStatusCodeService;

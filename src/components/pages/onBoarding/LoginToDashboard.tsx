@@ -20,7 +20,7 @@ function LoginToDashboard() {
         }}
       >
         <SvgIcon iconName="icon-discord" wrapperStyle={{ height: '100%' }} />
-        <Typography variant="body1" color="initial" sx={{ marginLeft: '1rem' }}>
+        <Typography variant="body1" color="black" sx={{ marginLeft: '1rem' }}>
           Already connected?{' '}
           <b
             style={{
