@@ -25,7 +25,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'react/jsx-props-no-spreading': 'off',
-    'no-array-index-key': 'off',
+    'react/no-array-index-key': 'off',
     'no-nested-ternary': 'off',
   },
 };

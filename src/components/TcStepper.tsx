@@ -118,8 +118,8 @@ function TcStepper({ labels, ...props }: TcStepperProps) {
       }
     >
       {labels &&
-        labels.map((label) => (
-          <Step key={label}>
+        labels.map((label, index) => (
+          <Step key={index}>
             <StepLabel StepIconComponent={ColorlibStepIcon}>{label}</StepLabel>
           </Step>
         ))}
