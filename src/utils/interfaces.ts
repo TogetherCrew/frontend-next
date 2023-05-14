@@ -102,3 +102,8 @@ export interface IUserData {
   guild: IGuild;
   token: IToken;
 }
+
+export interface IDateRange {
+  startDate: string;
+  endDate: string;
+}

@@ -12,6 +12,7 @@ import StepThree from '../components/pages/onBoarding/StepThree';
 import getUrlParams from '../helper/routeHelper';
 import { CallbackUrlParams, UrlParams } from '../utils/interfaces';
 import WarningBox from '../components/pages/onBoarding/WarningBox';
+import useStatusCodeService from '../services/StatusCodeService';
 
 function OnBoarding() {
   const theme = useTheme();
@@ -29,6 +30,7 @@ function OnBoarding() {
     guildName: '',
   });
   const location = useLocation();
+  const { writeUserToLocalStorage } = useStatusCodeService();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedEffect = useCallback(
@@ -44,6 +46,7 @@ function OnBoarding() {
         guildName: params.guildName || '',
       };
       setUrlParams(callbackParams);
+      writeUserToLocalStorage(urlParams);
 
       if (params.statusCode === '501') {
         setActiveServerStatus(false);

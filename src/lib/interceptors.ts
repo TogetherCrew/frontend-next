@@ -3,6 +3,8 @@ import {
   type AxiosError,
   type AxiosResponse,
 } from 'axios';
+import { StorageService } from '../services/StorageService';
+import { IUserData } from '../utils/interfaces';
 
 export interface ConsoleError {
   status: number;
@@ -12,9 +14,10 @@ export interface ConsoleError {
 export const requestInterceptor = (
   config: InternalAxiosRequestConfig
 ): InternalAxiosRequestConfig => {
-  const token = '';
-  if (token) {
-    config.headers.set('Authorization', `Bearer ${token}`);
+  const user = StorageService.readLocalStorage<IUserData>('user');
+
+  if (user?.token && user.token.accessToken) {
+    config.headers.set('Authorization', `Bearer ${user.token.accessToken}`);
   }
   return config;
 };

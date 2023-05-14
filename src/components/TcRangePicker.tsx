@@ -1,19 +1,25 @@
 import { useState } from 'react';
-import uuid from 'react-uuid';
 import TcButton from './TcButton';
 
-interface Option {
+interface IOption {
   value: number;
   label: string;
 }
 
-function TcRangePicker({ options }: { options: Option[] }) {
-  const [selectedRange, setSelectedRange] = useState<Option>(options[0]);
+interface ITcRangePickerProps {
+  options: IOption[];
+  updatePeriodRange: (rangeValue: number) => void;
+}
 
-  function handleOptionClick(option: Option) {
+function TcRangePicker({ options, updatePeriodRange }: ITcRangePickerProps) {
+  const [selectedRange, setSelectedRange] = useState<IOption>(options[0]);
+
+  function handleOptionClick(option: IOption) {
     setSelectedRange((prevSelectedRange) =>
       prevSelectedRange === option ? prevSelectedRange : option
     );
+
+    updatePeriodRange(option.value); // Call the updatePeriodRange function to update the period range
   }
 
   return (
@@ -25,7 +31,7 @@ function TcRangePicker({ options }: { options: Option[] }) {
     >
       {options.map((option) => (
         <TcButton
-          key={`${uuid() + option.value}`}
+          key={option.value}
           variant="contained"
           sx={{
             backgroundColor:
