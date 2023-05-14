@@ -46,7 +46,7 @@ function OnBoarding() {
         guildName: params.guildName || '',
       };
       setUrlParams(callbackParams);
-      writeUserToLocalStorage(urlParams);
+      writeUserToLocalStorage(callbackParams);
 
       if (params.statusCode === '501') {
         setActiveServerStatus(false);
