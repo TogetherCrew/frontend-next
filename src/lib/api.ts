@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -8,8 +9,10 @@ import { Envs, ensureEnvironments } from '../config/index';
 import { StorageService } from '../services/StorageService';
 import { IUserData } from '../utils/interfaces';
 
+// Retrieve environment variables
 const env: Envs = ensureEnvironments();
 
+// Configure Axios instance
 const axiosRequestConfig: AxiosRequestConfig = {
   baseURL: env.VITE_API_BASE_URL,
   responseType: 'json',
@@ -19,21 +22,28 @@ const axiosRequestConfig: AxiosRequestConfig = {
   },
 };
 
+// Create Axios instance
 const api: AxiosInstance = axios.create(axiosRequestConfig);
 
+// Flag to track whether a token refresh is in progress
 let isRefreshing = false;
+
+// Queue to store pending requests during token refresh
 const requestQueue: Array<() => void> = [];
 
-// Function to refresh the access token
+/**
+ * Function to refresh the access token.
+ * @returns A promise that resolves to an object containing the new access token and refresh token.
+ */
 async function refreshAccessToken(): Promise<{
   accessToken: string;
   refreshToken: string;
 }> {
-  // Implement your logic to refresh the access token
-  // For example, make a request to the server with the refresh token and get a new access token
   const user = StorageService.readLocalStorage<IUserData>('user');
   if (user) {
     const { token } = user;
+
+    // Make a request to the "refresh-tokens" endpoint to get new access and refresh tokens
     const response = await api.post<{
       access: { token: string };
       refresh: { token: string };
@@ -45,19 +55,18 @@ async function refreshAccessToken(): Promise<{
     return { accessToken: access.token, refreshToken: refresh.token };
   }
 
-  // Return an empty object or handle the error case as needed
+  // Return empty tokens if user data is not available
   return { accessToken: '', refreshToken: '' };
 }
 
 // Add an Axios interceptor to handle request errors
 api.interceptors.request.use(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async (config: any) => {
-    // Add your logic to modify the request config if needed
-    // For example, add authentication headers
     const user = StorageService.readLocalStorage<IUserData>('user');
     if (user) {
       const { token } = user;
-      // eslint-disable-next-line no-param-reassign
+      // Add the access token to the request headers
       config.headers = {
         ...config.headers,
         Authorization: `Bearer ${token.accessToken}`,
@@ -79,14 +88,15 @@ api.interceptors.response.use(
     return response;
   },
   async (error: AxiosError<unknown>) => {
-    // Handle response error
     if (error.response && error.response.status === 401) {
       // Access token expired or not authorized
       const originalRequest: AxiosRequestConfig | undefined = error.config;
 
       if (!isRefreshing) {
         isRefreshing = true;
+
         try {
+          // Refresh the access token
           const { accessToken, refreshToken } = await refreshAccessToken();
           isRefreshing = false;
 
@@ -137,6 +147,7 @@ api.interceptors.response.use(
         });
       }
     }
+
     return Promise.reject(error);
   }
 );
