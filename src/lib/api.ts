@@ -103,8 +103,10 @@ api.interceptors.response.use(
           // Update the user's access token and refresh token in local storage
           const user = StorageService.readLocalStorage<IUserData>('user');
           if (user) {
-            user.token.accessToken = accessToken;
-            user.token.refreshToken = refreshToken;
+            user.token = {
+              accessToken,
+              refreshToken,
+            };
             StorageService.writeLocalStorage('user', user);
           }
 
@@ -112,8 +114,8 @@ api.interceptors.response.use(
           if (originalRequest) {
             originalRequest.headers = {
               ...originalRequest.headers,
-              Authorization: `Bearer ${accessToken}`,
-            } ?? { Authorization: `Bearer ${accessToken}` };
+              Authorization: `Bearer ${refreshToken}`,
+            } ?? { Authorization: `Bearer ${refreshToken}` };
             return await api.request(originalRequest);
           }
         } catch (refreshError) {

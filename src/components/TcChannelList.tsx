@@ -1,80 +1,74 @@
 import { Box, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TcButton from './TcButton';
 import SvgIcon from './SvgIcon';
 import { IGuildProps, ISubchannelProps } from '../utils/interfaces';
 import TcCheckbox from './TcChecbox';
 
-const mockGuild: IGuildProps[] = [
-  {
-    id: '123',
-    title: 'My Awesome Guild',
-    subChannels: [
-      {
-        id: '4526',
-        name: 'General',
-        parent_id: '123',
-        canReadMessageHistoryAndViewChannel: true,
-      },
-      {
-        id: '789',
-        name: 'Random',
-        parent_id: '123',
-        canReadMessageHistoryAndViewChannel: false,
-      },
-    ],
-  },
-  {
-    id: '133',
-    title: 'My Awesome Guild2',
-    subChannels: [
-      {
-        id: '456',
-        name: 'General1',
-        parent_id: '123',
-        canReadMessageHistoryAndViewChannel: true,
-      },
-      {
-        id: '7892',
-        name: 'Random2',
-        parent_id: '123',
-        canReadMessageHistoryAndViewChannel: false,
-      },
-    ],
-  },
-];
+function TcChannelList({
+  channels,
+  handleSelectedChannels,
+}: {
+  channels: IGuildProps[];
+  handleSelectedChannels: (channels: IGuildProps[]) => void;
+}) {
+  const [activeChannels, setActiveChannels] = useState<IGuildProps[]>(channels);
 
-function TcChannelList() {
-  const [selectedChannels, setSelectedChannels] = useState<string[]>([]);
-  const [selectAllChannels, setSelectAllChannels] = useState(false);
+  useEffect(() => {
+    handleSelectedChannels(activeChannels);
+  }, [activeChannels, handleSelectedChannels]);
 
   const handleSelectAllChannelsChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
+    guildId: string
   ) => {
-    setSelectAllChannels(event.target.checked);
-    if (event.target.checked) {
-      const allChannelIds = mockGuild.flatMap((guild) =>
-        guild.subChannels.map((channel) => channel.id)
-      );
-      setSelectedChannels(allChannelIds);
-    } else {
-      setSelectedChannels([]);
-    }
+    const isChecked = event.target.checked;
+
+    const updatedChannels = channels.map((guild: IGuildProps) => {
+      if (guild.id === guildId) {
+        const updatedSubChannels = guild.subChannels.map(
+          (channel: ISubchannelProps) => ({
+            ...channel,
+            isSelected: isChecked,
+          })
+        );
+
+        return {
+          ...guild,
+          subChannels: updatedSubChannels,
+        };
+      }
+      return guild;
+    });
+    setActiveChannels(updatedChannels);
   };
 
-  const handleCheckboxChange = (channelId: string) => {
-    if (selectedChannels.includes(channelId)) {
-      setSelectedChannels(selectedChannels.filter((id) => id !== channelId));
-      setSelectAllChannels(false);
-    } else {
-      setSelectedChannels([...selectedChannels, channelId]);
-      if (
-        selectedChannels.length + 1 ===
-        mockGuild.flatMap((guild) => guild.subChannels).length
-      ) {
-        setSelectAllChannels(true);
-      }
-    }
+  const handleCheckboxChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    channelId: string
+  ) => {
+    const isChecked = event.target.checked;
+
+    setActiveChannels((prevChannels) => {
+      const updatedChannels = prevChannels.map((guild) => {
+        const updatedSubChannels = guild.subChannels.map((channel) => {
+          if (channel.id === channelId) {
+            return {
+              ...channel,
+              isSelected: isChecked,
+            };
+          }
+          return channel;
+        });
+
+        return {
+          ...guild,
+          subChannels: updatedSubChannels,
+        };
+      });
+
+      return updatedChannels;
+    });
   };
 
   return (
@@ -98,7 +92,7 @@ function TcChannelList() {
         variant="outlined"
         startIcon={<SvgIcon iconName="icon-refresh" />}
       />
-      {mockGuild.map((guild) => (
+      {activeChannels.map((guild: IGuildProps) => (
         <div
           key={guild.id}
           style={{ display: 'flex', flexDirection: 'column' }}
@@ -116,16 +110,18 @@ function TcChannelList() {
             <TcCheckbox
               sx={{ padding: '0' }}
               label="All Channels"
-              checked={selectAllChannels}
-              onChange={handleSelectAllChannelsChange}
+              checked={guild.subChannels.every((channel) => channel.isSelected)}
+              onChange={(event) =>
+                handleSelectAllChannelsChange(event, guild.id)
+              }
             />
             {guild.subChannels.map((channel: ISubchannelProps) => (
               <TcCheckbox
                 key={channel.id}
                 sx={{ padding: '0' }}
                 label={channel.name}
-                checked={selectedChannels.includes(channel.id)}
-                onChange={() => handleCheckboxChange(channel.id)}
+                checked={channel.isSelected ?? false}
+                onChange={(event) => handleCheckboxChange(event, channel.id)}
               />
             ))}
           </div>

@@ -5,6 +5,7 @@ export interface ISubchannelProps {
   id: string;
   name: string;
   parent_id: string;
+  isSelected?: boolean;
 }
 
 export interface IGuildProps {

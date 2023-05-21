@@ -1,8 +1,8 @@
 import { create } from 'zustand';
-import createAuthSlice from './slices/authSlice';
+import createGuildSlice from './slices/guildSlice';
 
 const useAppStore = create<any>()((...a) => ({
-  ...createAuthSlice(...a),
+  ...createGuildSlice(...a),
 }));
 
 export default useAppStore;

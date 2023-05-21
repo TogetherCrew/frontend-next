@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import {
   AccordionDetails,
   AccordionSummary,
@@ -14,22 +13,44 @@ import TcChannelList from './TcChannelList';
 import TcAccardion from './TcAccardion';
 import { UserContext } from '../context/UserContext';
 import { useGuildChannels } from '../hooks/GuildHooks';
+import useAppStore from '../store/useStore';
+import { IGuildProps, ISubchannelProps } from '../utils/interfaces';
 
 function TcSelectedChannels() {
+  const { channels, setChannels } = useAppStore();
   const [isOpenDialog, setOpenDialog] = useState<boolean>(false);
-  const selectedChannels = 0;
+  const [selectedChannels, setSelectedChannels] = useState<IGuildProps[]>([]);
   const { state } = useContext(UserContext);
   const { user } = state;
   const guildId = user?.guild?.guildId || '';
 
-  const { isLoading, isError, data, error, refetch } = useGuildChannels({
+  const { data, isLoading, refetch } = useGuildChannels({
     guildId,
-    enabled: false,
+    enabled: true,
   });
 
-  const getGuildsChannels = () => {
-    refetch();
+  const getGuildsChannels = async () => {
     setOpenDialog(true);
+    await refetch();
+    setChannels(data);
+  };
+
+  const selectedSubChannelsCount = selectedChannels.reduce(
+    (acc: number, guild: IGuildProps) => {
+      const selectedSubChannels = guild.subChannels.filter(
+        (channel: ISubchannelProps) => channel.isSelected
+      );
+      return acc + selectedSubChannels.length;
+    },
+    0
+  );
+
+  const updateSelectedChannles = (updatedGuilds: IGuildProps[]) => {
+    setSelectedChannels(updatedGuilds);
+  };
+  const submitSelectedChannels = () => {
+    console.log(selectedChannels);
+    setOpenDialog(false);
   };
   return (
     <div
@@ -40,7 +61,7 @@ function TcSelectedChannels() {
       }}
     >
       <Typography variant="body1" color="black">
-        Selected channels: {selectedChannels}
+        Selected channels: {selectedSubChannelsCount}
       </Typography>
       <TcButton label="Show channels" onClick={() => getGuildsChannels()} />
       <TcDialog
@@ -86,7 +107,10 @@ function TcSelectedChannels() {
           channels the bot can see.
         </Typography>
         <DialogContent sx={{ padding: '1rem 0' }}>
-          <TcChannelList />
+          <TcChannelList
+            channels={channels}
+            handleSelectedChannels={updateSelectedChannles}
+          />
           <TcAccardion
             disableGutters
             defaultExpanded
@@ -170,7 +194,7 @@ function TcSelectedChannels() {
             display: 'flex',
             margin: '0 auto',
           }}
-          onClick={() => setOpenDialog(false)}
+          onClick={() => submitSelectedChannels()}
         />
       </TcDialog>
     </div>
