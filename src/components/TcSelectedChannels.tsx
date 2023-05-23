@@ -13,26 +13,27 @@ import TcChannelList from './TcChannelList';
 import TcAccardion from './TcAccardion';
 import { UserContext } from '../context/UserContext';
 import { useGuildChannels } from '../hooks/GuildHooks';
-import useAppStore from '../store/useStore';
 import { IGuildProps, ISubchannelProps } from '../utils/interfaces';
 
 function TcSelectedChannels() {
-  const { channels, setChannels } = useAppStore();
   const [isOpenDialog, setOpenDialog] = useState<boolean>(false);
   const [selectedChannels, setSelectedChannels] = useState<IGuildProps[]>([]);
   const { state } = useContext(UserContext);
   const { user } = state;
   const guildId = user?.guild?.guildId || '';
 
-  const { data, isLoading, refetch } = useGuildChannels({
+  const {
+    data: channels,
+    isLoading,
+    refetch,
+  } = useGuildChannels({
     guildId,
-    enabled: true,
+    enabled: false,
   });
 
   const getGuildsChannels = async () => {
     setOpenDialog(true);
     await refetch();
-    setChannels(data);
   };
 
   const selectedSubChannelsCount = selectedChannels.reduce(

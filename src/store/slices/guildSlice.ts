@@ -10,16 +10,7 @@ const createGuildSlice: StateCreator<GuildState> = (set) => ({
   channels: [],
 
   setChannels: (categories) => {
-    const transformedCategories = categories.map((category) => ({
-      ...category,
-      subChannels: category.subChannels.map((subChannel) => ({
-        ...subChannel,
-        // Add new property here. For example:
-        isSelected: true,
-      })),
-    }));
-
-    set({ channels: transformedCategories });
+    set({ channels: categories });
   },
 });
 
