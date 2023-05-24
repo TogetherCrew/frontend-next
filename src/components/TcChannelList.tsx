@@ -1,18 +1,30 @@
-import { Box, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import TcButton from './TcButton';
 import SvgIcon from './SvgIcon';
 import { IGuildProps, ISubchannelProps } from '../utils/interfaces';
 import TcCheckbox from './TcChecbox';
 
+interface TcChannelListProps {
+  channels: IGuildProps[];
+  isLoading: boolean;
+  handleSelectedChannels: (channels: IGuildProps[]) => void;
+  refetchChannels: () => void;
+}
+
 function TcChannelList({
   channels,
+  isLoading,
   handleSelectedChannels,
-}: {
-  channels: IGuildProps[];
-  handleSelectedChannels: (channels: IGuildProps[]) => void;
-}) {
+  refetchChannels,
+}: TcChannelListProps) {
   const [activeChannels, setActiveChannels] = useState<IGuildProps[]>(channels);
+
+  useEffect(() => {
+    if (channels && channels.length > 0) {
+      setActiveChannels(channels);
+    }
+  }, [channels]);
 
   useEffect(() => {
     handleSelectedChannels(activeChannels);
@@ -71,6 +83,24 @@ function TcChannelList({
     });
   };
 
+  if (isLoading) {
+    return (
+      <Box
+        sx={{
+          border: '1px solid #C6C6C6',
+          padding: '1rem',
+          borderRadius: '6px',
+          overflow: 'hidden',
+          height: '410px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <Box
       sx={{
@@ -91,42 +121,46 @@ function TcChannelList({
         }}
         variant="outlined"
         startIcon={<SvgIcon iconName="icon-refresh" />}
+        onClick={() => refetchChannels()}
       />
-      {activeChannels.map((guild: IGuildProps) => (
-        <div
-          key={guild.id}
-          style={{ display: 'flex', flexDirection: 'column' }}
-        >
-          <Typography variant="body1" color="black" fontWeight="semibold">
-            {guild.title}
-          </Typography>
+      {activeChannels &&
+        activeChannels.map((guild: IGuildProps) => (
           <div
-            style={{
-              paddingLeft: '1rem',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
+            key={guild.id}
+            style={{ display: 'flex', flexDirection: 'column' }}
           >
-            <TcCheckbox
-              sx={{ padding: '0' }}
-              label="All Channels"
-              checked={guild.subChannels.every((channel) => channel.isSelected)}
-              onChange={(event) =>
-                handleSelectAllChannelsChange(event, guild.id)
-              }
-            />
-            {guild.subChannels.map((channel: ISubchannelProps) => (
+            <Typography variant="body1" color="black" fontWeight="semibold">
+              {guild.title}
+            </Typography>
+            <div
+              style={{
+                paddingLeft: '1rem',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
               <TcCheckbox
-                key={channel.id}
                 sx={{ padding: '0' }}
-                label={channel.name}
-                checked={channel.isSelected ?? false}
-                onChange={(event) => handleCheckboxChange(event, channel.id)}
+                label="All Channels"
+                checked={guild.subChannels.every(
+                  (channel) => channel.isSelected
+                )}
+                onChange={(event) =>
+                  handleSelectAllChannelsChange(event, guild.id)
+                }
               />
-            ))}
+              {guild.subChannels.map((channel: ISubchannelProps) => (
+                <TcCheckbox
+                  key={channel.id}
+                  sx={{ padding: '0' }}
+                  label={channel.name}
+                  checked={channel.isSelected ?? false}
+                  onChange={(event) => handleCheckboxChange(event, channel.id)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
     </Box>
   );
 }

@@ -5,7 +5,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import TcButton from './TcButton';
 import TcDialog from './TcDialog';
 import SvgIcon from './SvgIcon';
@@ -15,7 +15,13 @@ import { UserContext } from '../context/UserContext';
 import { useGuildChannels } from '../hooks/GuildHooks';
 import { IGuildProps, ISubchannelProps } from '../utils/interfaces';
 
-function TcSelectedChannels() {
+interface ITcSelectedChannelsProps {
+  handleSelectedChannels: (channels: IGuildProps[]) => void;
+}
+
+function TcSelectedChannels({
+  handleSelectedChannels,
+}: ITcSelectedChannelsProps) {
   const [isOpenDialog, setOpenDialog] = useState<boolean>(false);
   const [selectedChannels, setSelectedChannels] = useState<IGuildProps[]>([]);
   const { state } = useContext(UserContext);
@@ -26,33 +32,32 @@ function TcSelectedChannels() {
     data: channels,
     isLoading,
     refetch,
+    isFetching,
   } = useGuildChannels({
     guildId,
     enabled: false,
   });
+
+  useEffect(() => {
+    setSelectedChannels(channels);
+  }, [channels]);
 
   const getGuildsChannels = async () => {
     setOpenDialog(true);
     await refetch();
   };
 
-  const selectedSubChannelsCount = selectedChannels.reduce(
-    (acc: number, guild: IGuildProps) => {
-      const selectedSubChannels = guild.subChannels.filter(
-        (channel: ISubchannelProps) => channel.isSelected
-      );
-      return acc + selectedSubChannels.length;
-    },
-    0
-  );
-
   const updateSelectedChannles = (updatedGuilds: IGuildProps[]) => {
     setSelectedChannels(updatedGuilds);
   };
   const submitSelectedChannels = () => {
-    console.log(selectedChannels);
+    handleSelectedChannels(selectedChannels);
     setOpenDialog(false);
   };
+  const handleRefetchChannels = async () => {
+    await refetch();
+  };
+
   return (
     <div
       style={{
@@ -62,7 +67,7 @@ function TcSelectedChannels() {
       }}
     >
       <Typography variant="body1" color="black">
-        Selected channels: {selectedSubChannelsCount}
+        Selected channels: 0
       </Typography>
       <TcButton label="Show channels" onClick={() => getGuildsChannels()} />
       <TcDialog
@@ -110,7 +115,9 @@ function TcSelectedChannels() {
         <DialogContent sx={{ padding: '1rem 0' }}>
           <TcChannelList
             channels={channels}
+            isLoading={isLoading || isFetching}
             handleSelectedChannels={updateSelectedChannles}
+            refetchChannels={() => handleRefetchChannels()}
           />
           <TcAccardion
             disableGutters

@@ -2,19 +2,11 @@ import { Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import SvgIcon from '../../SvgIcon';
 import TcButton from '../../TcButton';
-import { CallbackUrlParams } from '../../../utils/interfaces';
-import useStatusCodeService from '../../../services/StatusCodeService';
 
-interface IWarningBoxProps {
-  urlParams: CallbackUrlParams;
-}
-
-function WarningBox({ urlParams }: IWarningBoxProps) {
+function WarningBox() {
   const navigate = useNavigate();
-  const { writeUserToLocalStorage } = useStatusCodeService();
 
   const redirectToApp = () => {
-    writeUserToLocalStorage(urlParams);
     navigate('/settings');
   };
 

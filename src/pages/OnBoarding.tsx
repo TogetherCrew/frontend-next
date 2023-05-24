@@ -10,43 +10,21 @@ import StepTwo from '../components/pages/onBoarding/StepTwo';
 import { ReactComponent as TcLogo } from '../assets/icons/togethercrew-logo.svg';
 import StepThree from '../components/pages/onBoarding/StepThree';
 import getUrlParams from '../helper/routeHelper';
-import { CallbackUrlParams, UrlParams } from '../utils/interfaces';
+import { UrlParams } from '../utils/interfaces';
 import WarningBox from '../components/pages/onBoarding/WarningBox';
-import useStatusCodeService from '../services/StatusCodeService';
 
 function OnBoarding() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
   const [activeStep, setActiveStep] = useState<number>(-1);
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [activeServerStatus, setActiveServerStatus] = useState<boolean>(false);
-  const [urlParams, setUrlParams] = useState<CallbackUrlParams>({
-    statusCode: '',
-    accessToken: '',
-    accessExp: '',
-    refreshExp: '',
-    refreshToken: '',
-    guildId: '',
-    guildName: '',
-  });
-  const location = useLocation();
-  const { writeUserToLocalStorage } = useStatusCodeService();
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedEffect = useCallback(
     debounce(() => {
       const params: UrlParams = getUrlParams(location);
-      const callbackParams: CallbackUrlParams = {
-        statusCode: params.statusCode || '',
-        accessToken: params.accessToken || '',
-        accessExp: params.accessExp || '',
-        refreshExp: params.refreshExp || '',
-        refreshToken: params.refreshToken || '',
-        guildId: params.guildId || '',
-        guildName: params.guildName || '',
-      };
-      setUrlParams(callbackParams);
-      writeUserToLocalStorage(callbackParams);
 
       if (params.statusCode === '501') {
         setActiveServerStatus(false);
@@ -116,7 +94,7 @@ function OnBoarding() {
         }
       >
         {activeServerStatus ? (
-          <WarningBox urlParams={urlParams} />
+          <WarningBox />
         ) : (
           <>
             {activeStep === -1 || activeStep === 0 ? (

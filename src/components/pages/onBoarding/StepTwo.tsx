@@ -6,7 +6,7 @@ import TcButton from '../../TcButton';
 import TcTextField from '../../TcTextField';
 import { dateRangeOptions } from '../../../lib/data/date';
 import { DateService } from '../../../services/DateService';
-import { IDateRange } from '../../../utils/interfaces';
+import { IDateRange, IGuildProps } from '../../../utils/interfaces';
 
 interface IStepTwoProps {
   goNext: (step: number) => void;
@@ -18,6 +18,9 @@ function StepTwo({ goNext }: IStepTwoProps) {
     startDate: DateService.subtractDays(DateService.getCurrentDate(), 7),
     endDate: DateService.getCurrentDate(),
   });
+  const [selectedChannels, setSelectedChannels] = useState<
+    { channelId: string; channelName: string }[]
+  >([]);
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     emailAddressRef.current = event.target.value;
@@ -33,8 +36,20 @@ function StepTwo({ goNext }: IStepTwoProps) {
     });
   };
 
+  const handleSelectedChannels = (channels: IGuildProps[]) => {
+    const selectedSubChannels = channels
+      .flatMap((channel) => channel.subChannels)
+      .filter((subChannel) => subChannel.isSelected)
+      .map(({ name, id }) => ({ channelId: id, channelName: name }));
+
+    setSelectedChannels(selectedSubChannels);
+  };
+
   const handleContinueClick = () => {
     const emailAddress = emailAddressRef.current;
+
+    console.log(emailAddress, selectedChannels, period);
+
     // Use the emailAddress for further processing or pass it to the goNext function
     goNext(2);
   };
@@ -58,7 +73,7 @@ function StepTwo({ goNext }: IStepTwoProps) {
         <Typography variant="body1" color="black" fontWeight="bold">
           Confirm your imported channels
         </Typography>
-        <TcSelectedChannels />
+        <TcSelectedChannels handleSelectedChannels={handleSelectedChannels} />
       </Grid>
       <Grid item xs={8} rowSpacing={4}>
         <TcTextField

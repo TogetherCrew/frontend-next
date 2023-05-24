@@ -22,7 +22,10 @@ const useStatusCodeService = () => {
    * @param {string} pathname - The pathname of the route.
    * @param {CallbackUrlParams} params - The callback URL parameters.
    */
-  const redirectToRoute = (pathname: string, params?: CallbackUrlParams) => {
+  const redirectToRoute = (
+    pathname: string,
+    params?: { statusCode: string }
+  ) => {
     // Convert the callback URL parameters to a URL query string
     const urlParams: Record<string, string> = params
       ? Object.entries(params).reduce((acc, [key, value]) => {
@@ -77,7 +80,8 @@ const useStatusCodeService = () => {
         break;
       case '501':
       case '502':
-        redirectToRoute('/try-now', params);
+        writeUserToLocalStorage(params);
+        redirectToRoute('/try-now', { statusCode });
         break;
       case '503':
       case '504':
