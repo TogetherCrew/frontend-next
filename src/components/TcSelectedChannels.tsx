@@ -3,6 +3,7 @@ import {
   AccordionSummary,
   DialogContent,
   DialogTitle,
+  Link,
 } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { useContext, useEffect, useState } from 'react';
@@ -38,13 +39,40 @@ function TcSelectedChannels({
     enabled: false,
   });
 
+  function countSelectedSubChannels(channelsArray: IGuildProps[]) {
+    let count = 0;
+
+    if (channelsArray && Array.isArray(channelsArray)) {
+      channelsArray.forEach((channel) => {
+        if (channel.subChannels && Array.isArray(channel.subChannels)) {
+          channel.subChannels.forEach((subChannel: ISubchannelProps) => {
+            if (subChannel.isSelected === true) {
+              count++;
+            }
+          });
+        }
+      });
+    }
+
+    return count;
+  }
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
   useEffect(() => {
     setSelectedChannels(channels);
   }, [channels]);
 
-  const getGuildsChannels = async () => {
+  useEffect(() => {
+    if (selectedChannels) {
+      handleSelectedChannels(selectedChannels);
+    }
+  }, [handleSelectedChannels, selectedChannels]);
+
+  const openGuildModal = () => {
     setOpenDialog(true);
-    await refetch();
   };
 
   const updateSelectedChannles = (updatedGuilds: IGuildProps[]) => {
@@ -67,7 +95,7 @@ function TcSelectedChannels({
       }}
     >
       <Typography variant="body1" color="black">
-        Selected channels: 0
+        Selected channels: {countSelectedSubChannels(selectedChannels)}
       </Typography>
       <TcButton
         label="Show channels"
@@ -77,7 +105,7 @@ function TcSelectedChannels({
             textDecoration: 'underline', // Maintain underline on hover
           },
         }}
-        onClick={() => getGuildsChannels()}
+        onClick={() => openGuildModal()}
       />
       <TcDialog
         open={isOpenDialog}
@@ -91,7 +119,6 @@ function TcSelectedChannels({
               maxWidth: '650px',
               borderRadius: '10px',
               overflow: 'visible',
-              boxShadow: '0px 4px 8px rgba(55, 71, 79, 0.1)',
             },
             '& .MuiDialogContent-root': {
               overflow: 'auto',
@@ -123,7 +150,7 @@ function TcSelectedChannels({
         </Typography>
         <DialogContent sx={{ padding: '1rem 0' }}>
           <TcChannelList
-            channels={channels}
+            channels={selectedChannels}
             isLoading={isLoading || isFetching}
             handleSelectedChannels={updateSelectedChannles}
             refetchChannels={() => handleRefetchChannels()}
@@ -132,7 +159,12 @@ function TcSelectedChannels({
             disableGutters
             defaultExpanded
             elevation={0}
-            sx={{ boxShadow: 0 }}
+            sx={{
+              boxShadow: 0,
+              '&:.MuiPaper-root': {
+                boxShadow: 'none !important',
+              },
+            }}
           >
             <AccordionSummary>
               {' '}
@@ -141,64 +173,56 @@ function TcSelectedChannels({
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <>
-                <Typography
-                  variant="body2"
-                  color="black"
-                  sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
-                >
-                  Navigate to the channel you want to import on{' '}
-                  <a
-                    href="https://discord.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="MuiTypography-colorPrimary MuiTypography-fontWeightMedium MuiTypography-cursorPointer"
-                  >
-                    Discord
-                  </a>
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="black"
-                  sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
-                >
-                  Go to the settings for that specific channel (select the wheel
-                  on the right of the channel name)
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="black"
-                  sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
-                >
-                  Select <b>Permissions</b> (left sidebar), and then in the
-                  middle of the screen check <b>Advanced permissions</b>
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="black"
-                  sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
-                >
-                  With the <b>TogetherCrew Bot</b> selected, under Advanced
-                  Permissions, make sure that [View channel] and [Read message
-                  history] are marked as [✓]
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="black"
-                  sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
-                >
-                  Select the plus sign to the right of Roles/Members and under
-                  members select <b>TogetherCrew bot</b>
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="black"
-                  sx={{ paddingLeft: '1rem', paddingRight: '4rem' }}
-                >
-                  Click on the <b>Refresh List</b> button on this window and
-                  select the new channels
-                </Typography>
-              </>{' '}
+              <ol>
+                <li>
+                  <Typography variant="body2" color="black">
+                    Navigate to the channel you want to import on{' '}
+                    <Link
+                      href="https://discord.com/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      color="primary"
+                      sx={{
+                        fontWeight: 'bold',
+                        textDecoration: 'none',
+                      }}
+                    >
+                      Discord
+                    </Link>
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant="body2" color="black">
+                    Go to the settings for that specific channel (select the
+                    wheel on the right of the channel name)
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant="body2" color="black">
+                    Select <b>Permissions</b> (left sidebar), and then in the
+                    middle of the screen check <b>Advanced permissions</b>
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant="body2" color="black">
+                    With the <b>TogetherCrew Bot</b> selected, under Advanced
+                    Permissions, make sure that [View channel] and [Read message
+                    history] are marked as [✓]
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant="body2" color="black">
+                    Select the plus sign to the right of Roles/Members and under
+                    members select <b>TogetherCrew bot</b>
+                  </Typography>
+                </li>
+                <li>
+                  <Typography variant="body2" color="black">
+                    Click on the <b>Refresh List</b> button on this window and
+                    select the new channels
+                  </Typography>
+                </li>
+              </ol>
             </AccordionDetails>
           </TcAccardion>
         </DialogContent>
