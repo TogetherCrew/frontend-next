@@ -19,6 +19,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", ".eslintrc.cjs", "vite.config.ts", "storybook"],
+  "include": [
+    "src",
+    ".eslintrc.cjs",
+    "vite.config.ts",
+    "storybook",
+    "custom.d.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

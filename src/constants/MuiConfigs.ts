@@ -2,15 +2,16 @@ const palette = {
   primary: {
     main: '#804EE1',
     dark: '#653DB4',
+    darken: '##222222',
   },
   secondary: {
-    main: '#dc004e',
+    main: '#222222',
   },
   background: {
     default: '#fff',
   },
-  black: {
-    primary: '#222222',
+  danger: {
+    main: '#dc004e',
   },
   success: {
     main: '#3A9E2B',
@@ -27,8 +28,11 @@ const palette = {
   white: {
     main: '#FFFFFF',
   },
-  gray: {
+  grey: {
+    '100': '#909090',
     main: '#F5F5F5',
+    dark: '#E2E2E2',
+    darken: '#EDEDED',
   },
 };
 
@@ -47,4 +51,11 @@ const font = {
   md: '16px',
 };
 
-export { palette, borderRadius, opacity, font };
+const typography = {
+  h5: {
+    fontSize: '1.75rem',
+    fontWeight: 600,
+  },
+};
+
+export { palette, borderRadius, opacity, typography, font };

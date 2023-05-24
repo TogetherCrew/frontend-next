@@ -16,4 +16,7 @@ export default defineConfig({
       provider: 'c8',
     },
   },
+  server: {
+    port: 3000,
+  },
 });

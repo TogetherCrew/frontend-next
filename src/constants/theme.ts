@@ -1,13 +1,18 @@
-import { createTheme } from '@mui/material/styles';
-import { borderRadius, font, opacity, palette } from './MuiConfigs';
+import { createTheme, alpha } from '@mui/material/styles';
+import { borderRadius, font, typography, palette } from './MuiConfigs';
 
 export const theme = createTheme({
   typography: {
     fontFamily: 'Inter, sans-serif',
+    ...typography,
   },
   palette: {
     mode: 'light',
     ...palette,
+    action: {
+      disabledBackground: alpha(palette.primary.main, 0.6),
+      disabled: palette.white.main,
+    },
   },
   components: {
     MuiCssBaseline: {
@@ -21,14 +26,36 @@ export const theme = createTheme({
         },
       },
     },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+        },
+      },
+    },
+    MuiCheckbox: {
+      styleOverrides: {
+        root: {
+          color: 'rgba(0, 0, 0, 0.30)',
+          '&:hover': {
+            backgroundColor: 'rgba(0, 0, 0, 0.04)',
+          },
+          '&$checked': {
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.12)',
+            },
+          },
+        },
+      },
+    },
     MuiTooltip: {
       styleOverrides: {
         tooltip: {
           padding: '15px 20px',
           borderRadius: '6px',
-          backgroundColor: '#222222',
+          backgroundColor: palette.secondary.main,
           '& .MuiTooltip-arrow': {
-            color: '#222222',
+            color: palette.secondary.main,
           },
         },
       },
@@ -41,20 +68,11 @@ export const theme = createTheme({
         root: {
           fontSize: font.md,
           borderRadius: borderRadius.base,
-          textTransform: 'none', // change to a valid TextTransform value          fontSize: font.md,
-        },
-        contained: {
-          background: palette.primary.main,
-          '&:disabled': {
-            background: palette.primary.dark,
-            color: palette.white.main,
-            opacity: opacity.base,
+          textTransform: 'none',
+          '&:focus': {
+            outline: 'none',
           },
-        },
-        outlined: {
-          background: palette.gray.main,
-          border: `1px solid ${palette.black.primary}`,
-          color: palette.black.primary,
+          '&:hover': { outline: 'none' },
         },
       },
     },
