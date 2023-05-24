@@ -69,7 +69,16 @@ function TcSelectedChannels({
       <Typography variant="body1" color="black">
         Selected channels: 0
       </Typography>
-      <TcButton label="Show channels" onClick={() => getGuildsChannels()} />
+      <TcButton
+        label="Show channels"
+        sx={{
+          textDecoration: 'underline',
+          '&:hover': {
+            textDecoration: 'underline', // Maintain underline on hover
+          },
+        }}
+        onClick={() => getGuildsChannels()}
+      />
       <TcDialog
         open={isOpenDialog}
         toggleDialog={(e) => setOpenDialog(e)}

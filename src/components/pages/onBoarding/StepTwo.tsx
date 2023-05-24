@@ -1,5 +1,5 @@
 import { Grid, Typography } from '@mui/material';
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import TcRangePicker from '../../TcRangePicker';
 import TcSelectedChannels from '../../TcSelectedChannels';
 import TcButton from '../../TcButton';
@@ -7,16 +7,20 @@ import TcTextField from '../../TcTextField';
 import { dateRangeOptions } from '../../../lib/data/date';
 import { DateService } from '../../../services/DateService';
 import { IDateRange, IGuildProps } from '../../../utils/interfaces';
+import { useUpdateGuild } from '../../../hooks/GuildHooks';
+import { UserContext } from '../../../context/UserContext';
+import { useUpdateEmail } from '../../../hooks/UserHooks';
 
 interface IStepTwoProps {
   goNext: (step: number) => void;
 }
 
 function StepTwo({ goNext }: IStepTwoProps) {
+  const { state } = useContext(UserContext);
+  const { user } = state;
   const emailAddressRef = useRef<string>('');
   const [period, setPeriod] = useState<IDateRange>({
     startDate: DateService.subtractDays(DateService.getCurrentDate(), 7),
-    endDate: DateService.getCurrentDate(),
   });
   const [selectedChannels, setSelectedChannels] = useState<
     { channelId: string; channelName: string }[]
@@ -32,7 +36,6 @@ function StepTwo({ goNext }: IStepTwoProps) {
         DateService.getCurrentDate(),
         rangeValue
       ),
-      endDate: DateService.getCurrentDate(),
     });
   };
 
@@ -45,13 +48,40 @@ function StepTwo({ goNext }: IStepTwoProps) {
     setSelectedChannels(selectedSubChannels);
   };
 
-  const handleContinueClick = () => {
-    const emailAddress = emailAddressRef.current;
+  const { mutate: mutateGuild, isLoading: isLoadingGuild } = useUpdateGuild({
+    guildId: user?.guild?.guildId || '',
+  });
 
-    console.log(emailAddress, selectedChannels, period);
+  const { mutate: mutateEmail, isLoading: isLoadingEmail } = useUpdateEmail();
 
-    // Use the emailAddress for further processing or pass it to the goNext function
-    goNext(2);
+  const handleContinueClick = async () => {
+    const email = emailAddressRef.current;
+
+    try {
+      mutateGuild(
+        { period: period.startDate, selectedChannels },
+        {
+          onSuccess: async () => {
+            if (email && email !== '') {
+              mutateEmail(
+                { email },
+                {
+                  onSuccess: async () => {
+                    goNext(2);
+                  },
+                }
+              );
+            } else {
+              goNext(2);
+            }
+          },
+        }
+      );
+    } catch (error) {
+      // Handle error outside mutateGuild
+      console.error('Failed to update guild or email:', error);
+      // Perform any error handling or display error message
+    }
   };
 
   return (
@@ -96,6 +126,7 @@ function StepTwo({ goNext }: IStepTwoProps) {
             margin: '0 auto',
             marginTop: '2rem',
           }}
+          isLoading={isLoadingGuild || isLoadingEmail}
           onClick={handleContinueClick}
         />
       </Grid>

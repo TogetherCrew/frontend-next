@@ -8,6 +8,7 @@ import axios, {
 import { Envs, ensureEnvironments } from '../config/index';
 import { StorageService } from '../services/StorageService';
 import { IUserData } from '../utils/interfaces';
+import { showToast } from '../helper/toasterHelper';
 
 // Retrieve environment variables
 const env: Envs = ensureEnvironments();
@@ -87,7 +88,8 @@ api.interceptors.response.use(
     // You can modify the response data here if needed
     return response;
   },
-  async (error: AxiosError<unknown>) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async (error: AxiosError<any>) => {
     if (error.response && error.response.status === 401) {
       // Access token expired or not authorized
       const originalRequest: AxiosRequestConfig | undefined = error.config;
@@ -148,6 +150,8 @@ api.interceptors.response.use(
           });
         });
       }
+    } else if (error.response?.status === 400) {
+      showToast(error.response.data.message);
     }
 
     return Promise.reject(error);

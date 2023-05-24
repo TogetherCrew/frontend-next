@@ -106,5 +106,5 @@ export interface IUserData {
 
 export interface IDateRange {
   startDate: string;
-  endDate: string;
+  endDate?: string;
 }

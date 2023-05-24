@@ -1,10 +1,28 @@
-import { useQuery, UseQueryOptions } from 'react-query';
+import {
+  UseMutationOptions,
+  useMutation,
+  useQuery,
+  UseQueryOptions,
+} from 'react-query';
 import GuildApi from '../api/GuildApi';
-import { IGuildProps, ISubchannelProps } from '../utils/interfaces';
+import {
+  IGuildPayloadOptions,
+  IGuildProps,
+  ISubchannelProps,
+} from '../utils/interfaces';
 
 interface GuildChannelsQueryProps extends UseQueryOptions {
   guildId: string;
   enabled?: boolean; // Enable initial fetch
+}
+
+interface UpdateGuildMutationProps
+  extends UseMutationOptions<
+    IGuildPayloadOptions,
+    unknown,
+    Partial<IGuildPayloadOptions>
+  > {
+  guildId: string;
 }
 
 export function useGuildChannels(props: GuildChannelsQueryProps) {
@@ -27,6 +45,18 @@ export function useGuildChannels(props: GuildChannelsQueryProps) {
         }));
         return transformedGuildResponse;
       },
+    }
+  );
+}
+
+export function useUpdateGuild(props: UpdateGuildMutationProps) {
+  const { guildId, ...mutationOptions } = props;
+
+  return useMutation(
+    (updatedGuild: Partial<IGuildPayloadOptions>) =>
+      GuildApi.updateGuild(guildId, updatedGuild),
+    {
+      ...mutationOptions,
     }
   );
 }
