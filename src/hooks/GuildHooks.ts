@@ -39,10 +39,11 @@ export function useGuildChannels(props: GuildChannelsQueryProps) {
           subChannels: channels.subChannels.map(
             (subChannel: ISubchannelProps) => ({
               ...subChannel,
-              isSelected: true,
+              isSelected: subChannel.canReadMessageHistoryAndViewChannel,
             })
           ),
         }));
+
         return transformedGuildResponse;
       },
     }

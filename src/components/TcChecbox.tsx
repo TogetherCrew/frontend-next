@@ -7,10 +7,12 @@ interface TcCheckboxProps extends CheckboxProps {
 }
 
 function TcCheckbox({ ...props }: TcCheckboxProps) {
-  const { onChange, label, checked } = props;
+  const { onChange, label, checked, disabled } = props;
   return (
     <FormControlLabel
-      control={<Checkbox checked={checked} onChange={onChange} />}
+      control={
+        <Checkbox checked={checked} onChange={onChange} disabled={disabled} />
+      }
       label={label}
       sx={{
         '& .MuiTypography-root': {
