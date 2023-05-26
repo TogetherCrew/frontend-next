@@ -45,6 +45,9 @@ export const theme = createTheme({
               backgroundColor: 'rgba(0, 0, 0, 0.12)',
             },
           },
+          '&:disabled': {
+            color: 'rgba(0, 0, 0, 0.30)',
+          },
         },
       },
     },

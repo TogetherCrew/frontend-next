@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import TcButton from './TcButton';
 import SvgIcon from './SvgIcon';
@@ -107,7 +107,7 @@ function TcChannelList({
         border: '1px solid #C6C6C6',
         padding: '1rem',
         borderRadius: '6px',
-        overflow: 'hidden',
+        overflowY: 'scroll',
         height: '410px',
       }}
     >
@@ -116,8 +116,10 @@ function TcChannelList({
         color="secondary"
         sx={{
           paddingX: '1.4rem',
-          position: 'relative',
           float: 'right',
+          position: 'absolute',
+          right: '4rem',
+          background: 'white',
         }}
         variant="outlined"
         startIcon={<SvgIcon iconName="icon-refresh" />}
@@ -149,14 +151,42 @@ function TcChannelList({
                   handleSelectAllChannelsChange(event, guild.id)
                 }
               />
+              <Typography variant="body2" color="black">
+                Channels
+              </Typography>
               {guild.subChannels.map((channel: ISubchannelProps) => (
-                <TcCheckbox
+                <Grid
                   key={channel.id}
-                  sx={{ padding: '0' }}
-                  label={channel.name}
-                  checked={channel.isSelected ?? false}
-                  onChange={(event) => handleCheckboxChange(event, channel.id)}
-                />
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <TcCheckbox
+                    label={channel.name}
+                    checked={channel.isSelected ?? false}
+                    disabled={!channel.canReadMessageHistoryAndViewChannel}
+                    onChange={(event) =>
+                      handleCheckboxChange(event, channel.id)
+                    }
+                  />
+                  {!channel.canReadMessageHistoryAndViewChannel ? (
+                    <Typography
+                      variant="body2"
+                      color="error"
+                      sx={{ display: 'flex', alignItems: 'center' }}
+                    >
+                      <SvgIcon
+                        iconName="icon-error"
+                        wrapperStyle={{ padding: '0 0.3rem' }}
+                      />
+                      Bot needs access
+                    </Typography>
+                  ) : (
+                    ''
+                  )}
+                </Grid>
               ))}
             </div>
           </div>
