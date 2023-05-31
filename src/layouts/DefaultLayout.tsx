@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { ReactNode } from 'react';
 import { Outlet } from 'react-router-dom';
 import TcSidebar from '../components/layouts/TcSidebar';
@@ -9,19 +9,17 @@ interface DefaultLayoutProps {
 
 function DefaultLayout({ children }: DefaultLayoutProps) {
   return (
-    <Grid container spacing={12}>
-      <Grid item xs={12} md={3} xl={4}>
-        <TcSidebar />
-      </Grid>
-      <Grid item xs={12} md={3} xl={8}>
+    <Box sx={{ height: '100vh', display: 'flex' }}>
+      <TcSidebar />
+      <Box sx={{ flexGrow: 1, width: '100vh' }}>
         <Grid container spacing={0}>
-          <Grid item xs={12} md={12}>
+          <Grid item xs={12}>
             {children}
           </Grid>
         </Grid>
-        <Outlet />
-      </Grid>
-    </Grid>
+      </Box>
+      <Outlet />
+    </Box>
   );
 }
 
