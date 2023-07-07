@@ -13,15 +13,45 @@ function TcHeatmap({ data, xAxisCategories, yAxisCategories }: TcHeatmapProps) {
   const options: Highcharts.Options = {
     chart: {
       type: 'heatmap',
+      plotBorderWidth: 0,
     },
     title: {
-      text: 'Heatmap Chart',
+      text: '',
+    },
+    legend: {
+      enabled: false,
     },
     xAxis: {
       categories: xAxisCategories,
+      tickInterval: 1,
+      labels: {
+        step: 1,
+        style: {
+          fontSize: '14px',
+          fontFamily: 'Inter',
+        },
+      },
+      opposite: true,
+      gridLineWidth: 0,
+      lineWidth: 0,
+      lineColor: 'rgba(0,0,0,0.75)',
+      tickWidth: 0,
+      tickLength: 0,
+      tickColor: 'rgba(0,0,0,0.75)',
+      title: {
+        text: 'Hour',
+        style: {
+          fontSize: '14px',
+          fontFamily: 'Inter',
+        },
+        align: 'low',
+      },
     },
     yAxis: {
       categories: yAxisCategories,
+      title: {
+        text: '',
+      },
     },
     colorAxis: {
       min: 0,
@@ -44,7 +74,7 @@ function TcHeatmap({ data, xAxisCategories, yAxisCategories }: TcHeatmapProps) {
     series: [
       {
         type: 'heatmap',
-        data,
+        data: data?.map((item: number[]) => [item[1], item[0], item[2] || 0]),
         dataLabels: {
           enabled: true,
           color: '#000000',
@@ -52,6 +82,9 @@ function TcHeatmap({ data, xAxisCategories, yAxisCategories }: TcHeatmapProps) {
             textOutline: 'none',
           },
         },
+        pointPadding: 1.5,
+        colsize: 0.8,
+        rowsize: 0.8,
       },
     ],
   };

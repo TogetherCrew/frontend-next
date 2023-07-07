@@ -37,7 +37,9 @@ const palette = {
 };
 
 const borderRadius = {
+  xs: '6px',
   base: '8px',
+  md: '14px',
 };
 
 const opacity = {

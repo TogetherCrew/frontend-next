@@ -1,10 +1,12 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { Box, Container, Typography } from '@mui/material';
 import TcHeatmap from '../components/charts/TcHeatmap';
 import useHeatmapChart from '../hooks/GraphHooks';
 import { IHeatmapChartPayload } from '../utils/interfaces';
-import { Box } from '@mui/material';
+import BoxContainer from '../components/BoxContainer';
+import TcPeriodPicker from '../components/TcPeriodPicker';
 
 // Load the dayjs plugins
 dayjs.extend(utc);
@@ -19,7 +21,11 @@ function CommunityInsights() {
 
   const payload: IHeatmapChartPayload = {
     timeZone,
-    channelIds: [],
+    channelIds: [
+      '1012430565959553148',
+      '1012430565959553149',
+      '1018893637326749858',
+    ],
     startDate,
     endDate,
   };
@@ -28,50 +34,67 @@ function CommunityInsights() {
   const { isLoading, error, data: heatmapData } = heatmapChartQuery;
 
   const xAxisCategories: string[] = [
-    '12 AM',
-    '1 AM',
-    '2 AM',
-    '3 AM',
-    '4 AM',
-    '5 AM',
-    '6 AM',
-    '7 AM',
-    '8 AM',
-    '9 AM',
-    '10 AM',
-    '11 AM',
-    '12 PM',
-    '1 PM',
-    '2 PM',
-    '3 PM',
-    '4 PM',
-    '5 PM',
-    '6 PM',
-    '7 PM',
-    '8 PM',
-    '9 PM',
-    '10 PM',
-    '11 PM',
+    '12',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    '11',
+    '12',
+    '13',
+    '14',
+    '15',
+    '16',
+    '17',
+    '18',
+    '19',
+    '20',
+    '21',
+    '22',
+    '23',
   ];
 
   const yAxisCategories: string[] = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
+    'MON',
+    'TUE',
+    'WED',
+    'THU',
+    'FRI',
+    'SAT',
+    'SUN',
   ];
 
   return (
-    <div>
-      <TcHeatmap
-        data={heatmapData}
-        xAxisCategories={xAxisCategories}
-        yAxisCategories={yAxisCategories}
-      />{' '}
-    </div>
+    <Container maxWidth="xl">
+      <BoxContainer width="auto" height="auto" p={4}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Typography variant="h5" fontWeight="bold" color="initial">
+            When is the community most active?
+          </Typography>
+          <TcPeriodPicker />
+        </Box>
+        <Typography variant="body1" color="initial" py={2}>
+          Hourly messages summed over the selected time period.
+        </Typography>
+        <TcHeatmap
+          data={heatmapData}
+          xAxisCategories={xAxisCategories}
+          yAxisCategories={yAxisCategories}
+        />
+      </BoxContainer>
+    </Container>
   );
 }
 

@@ -12,7 +12,7 @@ function DefaultLayout({ children }: DefaultLayoutProps) {
     <Box sx={{ height: '100vh', display: 'flex' }}>
       <TcSidebar />
       <Box sx={{ flexGrow: 1, width: '100vh' }}>
-        <Grid container spacing={0}>
+        <Grid container spacing={0} mt={6}>
           <Grid item xs={12}>
             {children}
           </Grid>
